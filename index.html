@@ -95,7 +95,7 @@
     <script>
         let isFlameVisible = true;
         let isSmokeVisible = false;
-        let threshold = 80; // 音の閾値を高めに設定（息を吹いたときに反応しやすくする）
+        let threshold = 50; // 音の閾値を低めに設定（モバイルでの感度向上）
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let analyser = audioContext.createAnalyser();
         let microphone;
@@ -111,12 +111,15 @@
                 let bufferLength = analyser.frequencyBinCount;
                 let dataArray = new Uint8Array(bufferLength);
 
+                // デバッグ用ログ
+                console.log("マイクからの入力を開始しました");
+
                 function detectSound() {
                     analyser.getByteFrequencyData(dataArray);
-                    
+
                     // 最大音量を検出
                     let maxVolume = Math.max(...dataArray);
-                    console.log(maxVolume); // 最大音量をデバッグ用に表示
+                    console.log("最大音量: " + maxVolume); // 最大音量をデバッグ用に表示
 
                     // 最大音量が閾値を超えたら火を消す
                     if (maxVolume > threshold && isFlameVisible) {
