@@ -14,7 +14,7 @@
         #cake {
             position: relative;
             display: inline-block;
-            margin-top: 120px;
+            margin-top: 100px;
         }
         #candle {
             position: absolute;
@@ -35,7 +35,6 @@
             animation: flameAnimation 1.5s infinite alternate;
         }
 
-        /* 炎の揺れ */
         @keyframes flameAnimation {
             0% {
                 transform: scale(1) rotate(0deg);
@@ -65,7 +64,6 @@
             animation: smokeAnimation 3s forwards;
         }
 
-        /* 煙のアニメーション */
         @keyframes smokeAnimation {
             0% {
                 transform: scale(1) translateY(0);
@@ -84,7 +82,7 @@
 </head>
 <body>
 
-    <h1>ろうそくの火を吹いて!!</h1>
+    <h1>ろうそくの火を吹いて消してみよう！</h1>
     <div id="cake">
         <img src="cake.png" alt="ケーキ" width="200">
         <div id="candle">
@@ -93,13 +91,12 @@
         </div>
     </div>
 
-    <p>マイクに向かって息を吹いて、ろうそくの火を消そう✨</p>
+    <p>マイクに向かって息を吹いて、ろうそくの火を消してください。</p>
 
     <script>
-        // マイク入力を取得して音を検出する
         let isFlameVisible = true;
         let isSmokeVisible = false;  // 煙が出るかどうかのフラグ
-        let threshold = 30; // 音の強さの閾値
+        let threshold = 15; // 音の強さの閾値を低めに設定
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let analyser = audioContext.createAnalyser();
         let microphone;
@@ -122,6 +119,7 @@
                         sum += dataArray[i];
                     }
                     let average = sum / bufferLength;
+                    console.log(average); // 音の強さをデバッグ用に表示
                     if (average > threshold && isFlameVisible) {
                         // 音が閾値を超えたらろうそくの火を消す
                         document.getElementById('flame').classList.add('hidden');
