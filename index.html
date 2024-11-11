@@ -8,8 +8,8 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
-            background-color: black; /* 背景を黒に */
-            color: white; /* 文字色を白に */
+            background-color: black;
+            color: white;
         }
         #cake {
             position: relative;
@@ -18,7 +18,7 @@
         }
         #candle {
             position: absolute;
-            bottom: 120px;
+            bottom: 50px;
             left: 50%;
             margin-left: -10px;
         }
@@ -28,13 +28,12 @@
             background: linear-gradient(180deg, rgba(255, 140, 0, 1) 0%, rgba(255, 220, 0, 0.8) 80%);
             border-radius: 50%;
             position: absolute;
-            top: -25px;
+            top: -50px;
             left: 50%;
             margin-left: -10px;
             box-shadow: 0 0 15px rgba(255, 140, 0, 0.7), 0 0 30px rgba(255, 140, 0, 0.5);
             animation: flameAnimation 1.5s infinite alternate;
         }
-
         @keyframes flameAnimation {
             0% {
                 transform: scale(1) rotate(0deg);
@@ -95,8 +94,8 @@
 
     <script>
         let isFlameVisible = true;
-        let isSmokeVisible = false;  // 煙が出るかどうかのフラグ
-        let threshold = 15; // 音の強さの閾値を低めに設定
+        let isSmokeVisible = false;
+        let threshold = 10; // 音の閾値を下げて反応しやすくする
         let audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let analyser = audioContext.createAnalyser();
         let microphone;
@@ -115,13 +114,15 @@
                 function detectSound() {
                     analyser.getByteFrequencyData(dataArray);
                     let sum = 0;
+                    // 周波数データを合計して平均音量を算出
                     for (let i = 0; i < bufferLength; i++) {
                         sum += dataArray[i];
                     }
                     let average = sum / bufferLength;
-                    console.log(average); // 音の強さをデバッグ用に表示
+                    console.log(average); // 音の強度をデバッグ用に表示
+
+                    // 音量が閾値を超えた場合に火を消す
                     if (average > threshold && isFlameVisible) {
-                        // 音が閾値を超えたらろうそくの火を消す
                         document.getElementById('flame').classList.add('hidden');
                         isFlameVisible = false;
 
@@ -135,6 +136,7 @@
 
                         alert('ろうそくの火が消えました！');
                     }
+
                     requestAnimationFrame(detectSound);
                 }
 
